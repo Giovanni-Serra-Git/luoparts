@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import { Button, Navbar, TextInput } from "flowbite-react"
-import { Link, NavLink, useLocation } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import {AiOutlineSearch} from "react-icons/ai"
 import {FaMoon} from "react-icons/fa"
 
@@ -11,10 +11,10 @@ function Header() {
     return (
         <Navbar className="border-b-2">
     
-            <NavLink to="/" className="self-center whitespace-nowraLinktext-sm sm:text-xl font-semibold dark:text-white" >
+            <Link to="/" className="self-center whitespace-nowraLinktext-sm sm:text-xl font-semibold dark:text-white" >
                 <span className="px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white">Luoparts'</span>
                 Blog
-            </NavLink>
+            </Link>
 
             <form onClick={(e) => e.preventDefault() }>
                 <TextInput type="text" placeholder="search" rightIcon={AiOutlineSearch} className="hidden lg:inline" />
