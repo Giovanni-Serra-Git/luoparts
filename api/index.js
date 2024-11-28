@@ -19,10 +19,9 @@ app.listen(3000, () => {
 
 // Permetti richieste solo da localhost:5173
 app.use(cors({
-    origin: 'http://localhost:5173',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Aggiungi metodi supportati se necessario
-    allowedHeaders: ['Content-Type', 'Authorization'], // Intestazioni permesse
-    credentials: true,  // Permetti l'invio di credenziali (ad esempio i cookie)
+  origin: "http://localhost:5173", // Permetti tutte le origini. Specifica un dominio per maggiore sicurezza.
+  methods: ["GET", "POST", "DELETE", "PUT"], // Permetti solo i metodi che ti servono
+  allowedHeaders: ["Content-Type", "Authorization"] // Specifica gli header permessi
 }));
 
 

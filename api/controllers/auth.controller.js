@@ -33,6 +33,7 @@ export const signin = async (req,res,next) => {
 
     let {email,password} = req.body;
 
+
     email = email.trim()
     password = password.trim()
 
@@ -53,7 +54,7 @@ export const signin = async (req,res,next) => {
             return next(errorHandler(400, "Invalid User or password"))
         }
 
-        const token = signin({
+        const token = jwt.sign({
             userId: validUser.id,
         }, process.env.JWT_SECRET)
 
