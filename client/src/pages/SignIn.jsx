@@ -4,50 +4,47 @@
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react"
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom" 
+import { signInStart, signInFailure, signInSuccess } from "../../../api/redux/user/userSlice.js"
+import { useDispatch, useSelector } from "react-redux"
 
  function SignIn() {
 
     const [formData,setFormData] = useState({})
-    const [errorMessage, setErrorMessage] = useState(null)
-    const [loading, setLoading] = useState(false)
+    // const [errorMessage, setErrorMessage] = useState(null)
+    // const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const {error: errorMessage, loading} = useSelector( state => state.user)
 
     function handleChange(e) {
         setFormData({...formData, [e.target.id]: e.target.value.trim()})
     }
 
     async function handleSubmit(e) {
-        e.preventDefault();
-        if (!formData.email || !formData.password) {
-            return setErrorMessage('Assicurati di compilare tutti i campi.');
+      e.preventDefault();
+      if (!formData.email || !formData.password) {
+        return dispatch(signInFailure('Compila tutti i campi'));
+      }
+      try {
+        dispatch(signInStart());
+        const res = await fetch('/api/auth/signin', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData),
+        });
+        const data = await res.json();
+        if (data.success === false) {
+          dispatch(signInFailure(data.message));
         }
-
-        try {
-            setLoading(true)
-            setErrorMessage(null)
-            const res = await fetch('/api/auth/signin', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData),
-              });
-              
-            const data = await res.json();
-
-            if(data.success === false) {
-                setLoading(false)
-                return setErrorMessage(data.message)
-            }
-
-            if (res.ok) {
-                navigate("/")
-            }
-
-            setLoading(false)
-        } catch (error) {
-            setLoading(false)
-            setErrorMessage(error.message)
+  
+        if (res.ok) {
+          dispatch(signInSuccess(data));
+          navigate('/');
         }
-    }
+      } catch (error) {
+        dispatch(signInFailure(error.message));
+      }
+    };
 
     return (
         <div className='min-h-screen mt-20'>
